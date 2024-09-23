@@ -250,13 +250,15 @@ Endpoint = ${WG_HOST}:${WG_CONFIG_PORT}`;
 
     // Calculate next IP
     let address;
-    for (let i = 2; i < 255; i++) {
+    for (let i = 2; i < 65535; i++) {
+      let low = i%255;
+      let high = Math.floor(i/255);
       const client = Object.values(config.clients).find((client) => {
-        return client.address === WG_DEFAULT_ADDRESS.replace('x', i);
+        return client.address === WG_DEFAULT_ADDRESS.replace('x', high).replace('x', low);
       });
 
       if (!client) {
-        address = WG_DEFAULT_ADDRESS.replace('x', i);
+        address = WG_DEFAULT_ADDRESS.replace('x', high).replace('x', low);
         break;
       }
     }
